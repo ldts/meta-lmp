@@ -17,6 +17,7 @@ SRC_URI_append_imx = " \
     file://0001-Minimal-HUK-implementation-without-full-CAAM-driver.patch \
     file://0001-imx-huk-imx7-and-imx7ulp-caam-clock-support.patch \
     file://0001-plat-imx-configure-the-SHMEM-section.patch \
+    file://0001-FIO-devel-core-tee-rpmb-workaround.patch \
 "
 
 PV = "3.6.0+git"

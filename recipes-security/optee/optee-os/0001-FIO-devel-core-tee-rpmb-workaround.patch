@@ -1,0 +1,77 @@
+From 3b91533b698cdf0bb385e0bf82d40507f87716de Mon Sep 17 00:00:00 2001
+From: Jorge Ramirez-Ortiz <jorge@foundries.io>
+Date: Fri, 8 Nov 2019 16:29:18 +0100
+Subject: [PATCH] [FIO devel] core: tee: rpmb workaround
+
+If the linux kernel MMC driver and the uboot MMC driver were to return
+a different value on the MMC CID (due to endian issues for instance),
+the one _not_ provisioning the key would be denied access when trying
+to interace to the RPMB.
+
+This patch allows any RPMB user to use a pre-agreed key at compile
+time.
+
+Signed-off-by: Jorge Ramirez-Ortiz <jorge@foundries.io>
+---
+ core/tee/tee_rpmb_fs.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/core/tee/tee_rpmb_fs.c b/core/tee/tee_rpmb_fs.c
+index c263e919..fce14fe9 100644
+--- a/core/tee/tee_rpmb_fs.c
++++ b/core/tee/tee_rpmb_fs.c
+@@ -287,6 +287,10 @@ static TEE_Result tee_rpmb_key_gen(uint16_t dev_id __unused,
+ 	 * CID [07: 01]: CRC (CRC7 checksum)
+ 	 * CID [00]: not used
+ 	 */
++#ifdef CFG_RPMB_FS_DEBUG_DATA
++	DMSG("CID:");
++	DHEXDUMP(rpmb_ctx->cid, RPMB_EMMC_CID_SIZE);
++#endif
+ 	memcpy(message, rpmb_ctx->cid, RPMB_EMMC_CID_SIZE);
+ 	memset(message + RPMB_CID_PRV_OFFSET, 0, 1);
+ 	memset(message + RPMB_CID_CRC_OFFSET, 0, 1);
+@@ -1043,6 +1047,15 @@ static TEE_Result tee_rpmb_write_and_verify_key(uint16_t dev_id __unused)
+ }
+ #endif
+ 
++#define FIO_FORCE_COMPILED_IN_RPMB_KEY
++
++#ifdef FIO_FORCE_COMPILED_IN_RPMB_KEY
++static uint8_t FORCED_KEY[] = { 0xb2, 0xc5, 0x06, 0x3b, 0xe4, 0x1b, 0x5e, 0x63,
++	0x32, 0xc7, 0x59, 0x51, 0x48, 0xd4, 0x1d, 0x33, 0x27, 0x00, 0x82, 0xa7,
++	0xcf, 0x0a, 0x9c, 0x55, 0x6c, 0x7c, 0xec, 0xc3, 0xe4, 0xc5, 0xb5, 0x65,
++};
++#endif
++
+ /* This function must never return TEE_SUCCESS if rpmb_ctx == NULL */
+ static TEE_Result tee_rpmb_init(uint16_t dev_id)
+ {
+@@ -1098,7 +1111,6 @@ static TEE_Result tee_rpmb_init(uint16_t dev_id)
+ 
+ 	if (!rpmb_ctx->key_derived) {
+ 		DMSG("RPMB INIT: Deriving key");
+-
+ 		res = tee_rpmb_key_gen(dev_id, rpmb_ctx->key,
+ 				       RPMB_KEY_MAC_SIZE);
+ 		if (res != TEE_SUCCESS) {
+@@ -1107,7 +1119,16 @@ static TEE_Result tee_rpmb_init(uint16_t dev_id)
+ 			goto func_exit;
+ 		}
+ 
++#ifdef FIO_FORCE_COMPILED_IN_RPMB_KEY
++		DMSG("Enabled FIO_FORCE_COMPILED_IN_RPMB_KEY");
++		DMSG("==> Derived key (will be ignored)");
++		DHEXDUMP((uint8_t *)rpmb_ctx->key, RPMB_KEY_MAC_SIZE);
++
++		DMSG("==> Compiled-in RPMB key in use");
++		memcpy((uint8_t *)rpmb_ctx->key, FORCED_KEY, RPMB_KEY_MAC_SIZE);
++		DHEXDUMP((uint8_t *)rpmb_ctx->key, RPMB_KEY_MAC_SIZE);
+ 		rpmb_ctx->key_derived = true;
++#endif
+ 	}
+ 
+ 	/* Perform a write counter read to verify if the key is ok. */
+-- 
+2.17.1
+

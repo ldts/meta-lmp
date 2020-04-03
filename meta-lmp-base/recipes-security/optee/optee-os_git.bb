@@ -57,7 +57,7 @@ EXTRA_OEMAKE_append_apalis-imx6 = " \
                 CFG_RPMB_FS=y CFG_RPMB_FS_DEV_ID=2 \
 "
 EXTRA_OEMAKE_append_imx = " \
-                CFG_CAAM_DBG=0x001 \
+                CFG_CAAM_DBG=0x001 CFG_NXP_WORKAROUND_CAAM_LOCKED_BY_HAB=y \
 "
 
 do_install() {

@@ -8,10 +8,10 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=30503fd321432fc713238f582193b78e"
 DEPENDS += "flex-native bison-native bc-native dtc-native"
 
-SRCREV = "04c60e0e5cae6101d628a80ce7330693a2f99bb9"
-SRCBRANCH = "2019.10+fio"
+SRCREV = "3cd3eadefe63d4b762962f1121468b10fb05e6a4"
+SRCBRANCH = "uuu-close"
 
-SRC_URI = "git://github.com/foundriesio/u-boot.git;branch=${SRCBRANCH} \
+SRC_URI = "git://github.com/ldts/u-boot.git;branch=${SRCBRANCH} \
     file://lmp.cfg \
 "
 

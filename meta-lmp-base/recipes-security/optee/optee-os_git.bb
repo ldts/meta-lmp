@@ -6,11 +6,11 @@ LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=c1f21c4f72f372ef38a5a4aee55ec173"
 
 DEPENDS = "python3-pycrypto-native python3-pyelftools-native"
 
-SRC_URI = "git://github.com/foundriesio/optee_os.git;branch=${SRCBRANCH}"
+SRC_URI = "git://github.com/ldts/optee_os.git;branch=${SRCBRANCH}"
 
 PV = "3.6.0+git"
-SRCREV = "cef93f4d90beb7e015ee75150007db6e437d3877"
-SRCBRANCH = "3.6.0+fio"
+SRCREV = "6b40372a609033c680b7a7cdd672067b2c915995"
+SRCBRANCH = "close-uuu"
 
 S = "${WORKDIR}/git"
 

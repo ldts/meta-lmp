@@ -8,8 +8,8 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=30503fd321432fc713238f582193b78e"
 DEPENDS += "flex-native bison-native bc-native dtc-native"
 
-SRCREV = "3cd3eadefe63d4b762962f1121468b10fb05e6a4"
-SRCBRANCH = "uuu-close"
+SRCREV = "c4ae411f234a3755f70422b14a384982a6785963"
+SRCBRANCH = "aeler-factory"
 
 SRC_URI = "git://github.com/ldts/u-boot.git;branch=${SRCBRANCH} \
     file://lmp.cfg \

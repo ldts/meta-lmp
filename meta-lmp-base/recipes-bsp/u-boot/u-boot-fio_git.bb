@@ -8,7 +8,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=30503fd321432fc713238f582193b78e"
 DEPENDS += "flex-native bison-native bc-native dtc-native"
 
-SRCREV = "6e82f28408cba327929a98d5e58dfd8f22c0856d"
+SRCREV = "360f0f75ea17182aee107be3cb4d86656a06ad5d"
 SRCBRANCH = "aeler-factory"
 
 SRC_URI = "git://github.com/ldts/u-boot.git;branch=${SRCBRANCH} \

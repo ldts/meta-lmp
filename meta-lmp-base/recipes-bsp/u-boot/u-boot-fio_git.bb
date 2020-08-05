@@ -8,10 +8,10 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=30503fd321432fc713238f582193b78e"
 DEPENDS += "flex-native bison-native bc-native dtc-native"
 
-SRCREV = "c3dc488020e6be81490b14955c09038814637ae0"
-SRCBRANCH = "2019.10+fio"
+SRCREV = "a4adf6749a0620e48c45f8cffcafc671592ee3ea"
+SRCBRANCH = "aeler-factory"
 
-SRC_URI = "git://github.com/foundriesio/u-boot.git;branch=${SRCBRANCH} \
+SRC_URI = "git://github.com/ldts/u-boot.git;branch=${SRCBRANCH} \
     file://fw_env.config \
     file://lmp.cfg \
 "

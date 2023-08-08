@@ -11,7 +11,7 @@ LIC_FILES_CHKSUM = " \
     file://COPYING;md5=97be96ca4fab23e9657ffa590b931c1a \
 "
 
-DEPENDS = "dbus ncurses"
+DEPENDS = "dbus ncurses xenomai4"
 
 SRCREV = "64cf5e80e6240284e6b757907b900507fe56f1b5"
 SRC_URI = "git://gitlab.freedesktop.org/pipewire/pipewire.git;branch=master;protocol=https"
@@ -53,8 +53,10 @@ SYSTEMD_PACKAGES = "${PN}"
 # The RTKit module is deprecated in favor of the newer RT module.
 # It still exists for legacy setups that still include it in
 # their PipeWire configuration files.
+#
+# Disable EVL
 EXTRA_OEMESON += " \
-    -Devl=disabled \
+    -Devl=enabled \
     -Dtests=disabled \
     -Dudevrulesdir=${nonarch_base_libdir}/udev/rules.d/ \
     -Dsystemd-system-unit-dir=${systemd_system_unitdir} \

@@ -1,0 +1,71 @@
+From 1b1add87d907d3e59202d7cf73c7ac4aa5dbfd43 Mon Sep 17 00:00:00 2001
+From: Jorge Ramirez-Ortiz <jorge@foundries.io>
+Date: Tue, 8 Aug 2023 13:55:48 +0200
+Subject: [PATCH] evl: update to Xenomai4 r46
+
+Fix build issues.
+
+Signed-off-by: Jorge Ramirez-Ortiz <jorge@foundries.io>
+---
+ spa/plugins/support/evl-system.c | 7 ++++---
+ spa/plugins/support/meson.build  | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/spa/plugins/support/evl-system.c b/spa/plugins/support/evl-system.c
+index 58130a061..43c856970 100644
+--- a/spa/plugins/support/evl-system.c
++++ b/spa/plugins/support/evl-system.c
+@@ -38,6 +38,7 @@
+ #include <spa/support/log.h>
+ #include <spa/support/system.h>
+ #include <spa/support/plugin.h>
++#include <spa/utils/names.h>
+ #include <spa/utils/type.h>
+ #include <spa/utils/result.h>
+ #include <spa/utils/string.h>
+@@ -153,7 +154,7 @@ static int impl_pollfd_add(void *object, int pfd, int fd, uint32_t events, void
+ 	e->fd = fd;
+ 	e->events = events;
+ 	e->data = data;
+-	return evl_add_pollfd(pfd, fd, e->events);
++	return evl_add_pollfd(pfd, fd, e->events, evl_nil);
+ }
+ 
+ static int impl_pollfd_mod(void *object, int pfd, int fd, uint32_t events, void *data)
+@@ -167,7 +168,7 @@ static int impl_pollfd_mod(void *object, int pfd, int fd, uint32_t events, void
+ 
+ 	e->events = events;
+ 	e->data = data;
+-	return evl_mod_pollfd(pfd, fd, e->events);
++	return evl_mod_pollfd(pfd, fd, e->events, evl_nil);
+ }
+ 
+ static int impl_pollfd_del(void *object, int pfd, int fd)
+@@ -281,7 +282,7 @@ static int impl_eventfd_create(void *object, int flags)
+ 	struct impl *impl = object;
+ 	int res;
+ 
+-	res = evl_new_xbuf(1024, 1024, "xbuf-%d-%p-%d", impl->pid, impl, impl->n_xbuf);
++	res = evl_new_xbuf(1024, "xbuf-%d-%p-%d", impl->pid, impl, impl->n_xbuf);
+ 	if (res < 0)
+ 		return res;
+ 
+diff --git a/spa/plugins/support/meson.build b/spa/plugins/support/meson.build
+index 1672d38df..601c8180b 100644
+--- a/spa/plugins/support/meson.build
++++ b/spa/plugins/support/meson.build
+@@ -24,9 +24,9 @@ spa_support_lib = shared_library('spa-support',
+ spa_support_dep = declare_dependency(link_with: spa_support_lib)
+ 
+ if get_option('evl').allowed()
+-  evl_inc = include_directories('/usr/evl/include')
++  evl_inc = include_directories('/usr/include/')
+   evl_lib = cc.find_library('evl',
+-                            dirs: ['/usr/evl/lib/'],
++                            dirs: ['/usr/lib/'],
+                             required: get_option('evl'))
+ 
+   spa_evl_sources = ['evl-system.c', 'evl-plugin.c']
+-- 
+2.34.1
+

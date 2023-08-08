@@ -14,7 +14,9 @@ LIC_FILES_CHKSUM = " \
 DEPENDS = "dbus ncurses xenomai4"
 
 SRCREV = "64cf5e80e6240284e6b757907b900507fe56f1b5"
-SRC_URI = "git://gitlab.freedesktop.org/pipewire/pipewire.git;branch=master;protocol=https"
+SRC_URI = "git://gitlab.freedesktop.org/pipewire/pipewire.git;branch=master;protocol=https \
+	   file://0001-evl-update-to-Xenomai4-r46.patch \
+	   "
 
 S = "${WORKDIR}/git"
 

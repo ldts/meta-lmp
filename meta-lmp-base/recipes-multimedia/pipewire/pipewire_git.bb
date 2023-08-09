@@ -13,7 +13,7 @@ LIC_FILES_CHKSUM = " \
 
 DEPENDS = "dbus ncurses xenomai4 pulseaudio"
 
-SRCREV = "38382d002d0905d60a964fc84dcaf4f8b507a473"
+SRCREV = "f038e3f23824f9319daaa9f9a31600fc6df49a39"
 SRC_URI = "git://gitlab.freedesktop.org/pipewire/pipewire.git;branch=master;protocol=https \
 	file://0001-evl-update-to-Xenomai4-r46.patch \
 	file://0003-evl-Use-complete-API-to-create-xbufs.patch \

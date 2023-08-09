@@ -11,12 +11,10 @@ LIC_FILES_CHKSUM = " \
     file://COPYING;md5=97be96ca4fab23e9657ffa590b931c1a \
 "
 
-DEPENDS = "dbus ncurses xenomai4"
+DEPENDS = "dbus ncurses xenomai4 pulseaudio"
 
-SRCREV = "64cf5e80e6240284e6b757907b900507fe56f1b5"
-SRC_URI = "git://gitlab.freedesktop.org/pipewire/pipewire.git;branch=master;protocol=https \
-	   file://0001-evl-update-to-Xenomai4-r46.patch \
-	   "
+SRCREV = "f5d1d7e683cbb9b8cba1ecb01a3caf213afc017b"
+SRC_URI = "git://gitlab.freedesktop.org/pipewire/pipewire.git;branch=master;protocol=https "
 
 S = "${WORKDIR}/git"
 
@@ -71,6 +69,7 @@ EXTRA_OEMESON += " \
     -Dbluez5-codec-aptx=disabled \
     -Dbluez5-codec-ldac=disabled \
     -Dlegacy-rtkit=false \
+    -Drlimits-install=false \
 "
 
 PACKAGECONFIG ??= "\
@@ -232,6 +231,19 @@ FILES:${PN} = " \
     ${systemd_system_unitdir}/pipewire.* \
     ${systemd_user_unitdir}/pipewire.* \
     ${bindir}/pipewire \
+    ${datadir}/pipewire/pipewire-aes67.conf \
+    ${datadir}/pipewire/pipewire-avb.conf \
+    ${datadir}/pipewire/filter-chain.conf \
+    ${datadir}/pipewire/pipewire.conf.avail/10-rates.conf \
+    ${datadir}/pipewire/pipewire.conf.avail/20-upmix.conf \
+    ${datadir}/pipewire/pipewire-pulse.conf.avail/20-upmix.conf \
+    ${datadir}/pipewire/client-rt.conf.avail/20-upmix.conf \
+    ${datadir}/pipewire/client.conf.avail/20-upmix.conf \
+    ${bindir}/pipewire-avb \
+    ${bindir}/pw-config \
+    ${bindir}/pipewire-aes67 \
+    ${bindir}/pw-encplay \
+    $(sysconfdir}/security/limits.d/25-pw-rlimits.conf \
 "
 
 FILES:${PN}-dev += " \

@@ -13,8 +13,13 @@ LIC_FILES_CHKSUM = " \
 
 DEPENDS = "dbus ncurses xenomai4 pulseaudio"
 
-SRCREV = "f5d1d7e683cbb9b8cba1ecb01a3caf213afc017b"
-SRC_URI = "git://gitlab.freedesktop.org/pipewire/pipewire.git;branch=master;protocol=https "
+SRCREV = "38382d002d0905d60a964fc84dcaf4f8b507a473"
+SRC_URI = "git://gitlab.freedesktop.org/pipewire/pipewire.git;branch=master;protocol=https \
+	file://0001-evl-update-to-Xenomai4-r46.patch \
+	file://0003-evl-Use-complete-API-to-create-xbufs.patch \
+	file://0004-meson-change-EVL-include-paths.patch \
+	file://0005-evl-fix-timerfd-read.patch \
+"
 
 S = "${WORKDIR}/git"
 
@@ -69,8 +74,10 @@ EXTRA_OEMESON += " \
     -Dbluez5-codec-aptx=disabled \
     -Dbluez5-codec-ldac=disabled \
     -Dlegacy-rtkit=false \
-    -Drlimits-install=false \
 "
+## For the tip of pipewire
+##    -Drlimits-install=false \
+##"
 
 PACKAGECONFIG ??= "\
     ${@bb.utils.contains('DISTRO_FEATURES', 'zeroconf', 'avahi', '', d)} \

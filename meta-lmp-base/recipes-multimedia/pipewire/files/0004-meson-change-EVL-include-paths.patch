@@ -1,0 +1,28 @@
+From ea0e92c5d9751a18ffb3141a0370f1468bb407fe Mon Sep 17 00:00:00 2001
+From: Jorge Ramirez-Ortiz <jorge@foundries.io>
+Date: Wed, 9 Aug 2023 12:09:30 +0200
+Subject: [PATCH 4/5] meson: change EVL include paths
+
+---
+ spa/plugins/support/meson.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/spa/plugins/support/meson.build b/spa/plugins/support/meson.build
+index 784b21e02..3a5425bba 100644
+--- a/spa/plugins/support/meson.build
++++ b/spa/plugins/support/meson.build
+@@ -24,9 +24,9 @@ spa_support_lib = shared_library('spa-support',
+ spa_support_dep = declare_dependency(link_with: spa_support_lib)
+ 
+ if get_option('evl').allowed()
+-  evl_inc = include_directories('/usr/evl/include')
++  evl_inc = include_directories('/usr/include')
+   evl_lib = cc.find_library('evl',
+-                            dirs: ['/usr/evl/lib/'],
++                            dirs: ['/usr/lib/'],
+                             required: get_option('evl'))
+ 
+   spa_evl_sources = ['evl-system.c', 'evl-plugin.c']
+-- 
+2.34.1
+

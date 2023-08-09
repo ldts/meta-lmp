@@ -1,0 +1,43 @@
+From ba7af15cb240b8c55d31c248f2793d03f03e3ff8 Mon Sep 17 00:00:00 2001
+From: Wim Taymans <wtaymans@redhat.com>
+Date: Wed, 9 Aug 2023 12:06:24 +0200
+Subject: [PATCH 3/5] evl: Use complete API to create xbufs
+
+So that we can set nonblock directly.
+
+Tested: Jorge Ramirez-Ortiz <jorge@foundries.io>
+---
+ spa/plugins/support/evl-system.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/spa/plugins/support/evl-system.c b/spa/plugins/support/evl-system.c
+index c2acb035b..1f4381a67 100644
+--- a/spa/plugins/support/evl-system.c
++++ b/spa/plugins/support/evl-system.c
+@@ -260,17 +260,18 @@ static int impl_timerfd_read(void *object, int fd, uint64_t *expirations)
+ static int impl_eventfd_create(void *object, int flags)
+ {
+ 	struct impl *impl = object;
+-	int res;
++	int res, fl;
++
++	fl = EVL_CLONE_PRIVATE;
++	if (flags & SPA_FD_NONBLOCK)
++		fl |= EVL_CLONE_NONBLOCK;
+ 
+-	res = evl_new_xbuf(1024, "xbuf-%d-%p-%d", impl->pid, impl, impl->n_xbuf);
++	res = evl_create_xbuf(1024, 1024, fl, "xbuf-%d-%p-%d", impl->pid, impl, impl->n_xbuf);
+ 	if (res < 0)
+ 		return res;
+ 
+ 	impl->n_xbuf++;
+ 
+-	if (flags & SPA_FD_NONBLOCK)
+-		fcntl(res, F_SETFL, fcntl(res, F_GETFL) | O_NONBLOCK);
+-
+ 	return res;
+ }
+ 
+-- 
+2.34.1
+

@@ -1,4 +1,4 @@
-KERNEL_META_REPO ?= "git://github.com/foundriesio/lmp-kernel-cache.git"
-KERNEL_META_REPO_PROTOCOL ?= "https"
-KERNEL_META_BRANCH ?= "linux-v6.1.y"
-KERNEL_META_COMMIT ?= "e118973a96dea12b1adc201b67147d93cae4341f"
+KERNEL_META_REPO ?= "git:///home/jramirez/Work/composefs/factory/ldts/sandbox/lmp-kernel-cache"
+KERNEL_META_REPO_PROTOCOL ?= "file"
+KERNEL_META_BRANCH ?= "linux-v6.6.y"
+KERNEL_META_COMMIT ?= "3b9b9ed5774298a0da0ea74dcedfafff3ad99f5a"

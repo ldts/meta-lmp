@@ -8,7 +8,14 @@ ostree_enabled() {
 
 ostree_run() {
 	if [ -n "$ROOTFS_DIR" ]; then
-		info "Preparing OSTree root at '$ROOTFS_DIR'..."
+		if [ -n "$bootparam_composefs" ]; then
+			[ ! -d /etc/ostree ] && msg "No initramfs composefs module found"
+			. /etc/ostree/composefs
+
+			ostree_composefs_prepare
+		fi
+
+		msg "Preparing OSTree root at '$ROOTFS_DIR'..."
 		/usr/lib/ostree/ostree-prepare-root $ROOTFS_DIR
 	else
 		debug "No rootfs has been set"

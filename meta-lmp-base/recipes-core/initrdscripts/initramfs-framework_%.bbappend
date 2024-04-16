@@ -35,7 +35,7 @@ FILES:initramfs-module-cryptfs-tpm2 = "${sysconfdir}/cryptfs/tpm2"
 
 SUMMARY:initramfs-module-ostree = "initramfs support for ostree based filesystems"
 RDEPENDS:initramfs-module-ostree = "${PN}-base ostree-switchroot"
-FILES:initramfs-module-ostree = "/init.d/98-ostree"
+FILES:initramfs-module-ostree = "/init.d/98-ostree ${sysconfdir}/ostree/initramfs-root-binding.key"
 
 SUMMARY:initramfs-module-ostree-factory-reset = "initramfs support for ostree based filesystems"
 RDEPENDS:initramfs-module-ostree-factory-reset = "${PN}-base ostree-switchroot"
@@ -55,4 +55,8 @@ do_install:append() {
 	install -m 0755 ${WORKDIR}/ostree ${D}/init.d/98-ostree
 	install -m 0755 ${WORKDIR}/ostree_factory_reset ${D}/init.d/98-ostree_factory_reset
 	install -m 0755 ${WORKDIR}/ostree_recovery ${D}/init.d/98-ostree_recovery
+
+	install -d ${D}${sysconfdir}/ostree/
+	install -m 0644 ${CFS_SIGN_KEYDIR}/${CFS_SIGN_KEYNAME}.pub \
+	                     ${D}${sysconfdir}/ostree/initramfs-root-binding.key
 }

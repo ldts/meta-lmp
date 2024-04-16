@@ -28,3 +28,8 @@ COMPILER_RT:libc-glibc:toolchain-clang:x86 = " \
     ${@bb.utils.contains('PACKAGECONFIG', 'static', '-rtlib=libgcc --unwindlib=libgcc', '', d)}"
 COMPILER_RT:libc-glibc:toolchain-clang:x86-64 = " \
     ${@bb.utils.contains('PACKAGECONFIG', 'static', '-rtlib=libgcc --unwindlib=libgcc', '', d)}"
+#
+# Enable composefs
+#
+PACKAGECONFIG:remove = " static"
+PACKAGECONFIG:append = " composefs ed25519-libsodium"

@@ -8,6 +8,7 @@ PACKAGE_INSTALL = "initramfs-framework-base \
 	${VIRTUAL-RUNTIME_base-utils} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'ima', 'initramfs-framework-ima', '', d)} \
 	${@bb.utils.contains('DISTRO_FEATURES', 'luks', '${PACKAGE_INSTALL_LUKS}', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'cfs', 'e2fsprogs-tune2fs fsverity-utils', '', d)} \
 	udev base-passwd e2fsprogs-e2fsck \
 	${ROOTFS_BOOTSTRAP_INSTALL}"
 

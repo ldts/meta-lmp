@@ -2,13 +2,73 @@
 # Copyright (C) 2018 Open Source Foundries Ltd.
 # Licensed on MIT
 
+SYSROOT_DIR="/sysroot"
+COMPOSEFS_NAME=".ostree.cfs"
+
 ostree_enabled() {
 	return 0
 }
 
+composefs_enable_fsverity_all() {
+    force="false"
+
+    # Enable verity on the composefs file of every deployment.
+    for cfsfile_ in "${SYSROOT_DIR}/ostree/deploy"/*/deploy/*/"${COMPOSEFS_NAME}"; do
+	# If enabled already, skip
+	if fsverity measure "${cfsfile_}" > /dev/null 2>/dev/null; then
+	    continue
+	else
+	    force="true"
+	    break
+	fi
+    done
+
+    # Enable verity on all repository objects.
+    if [ $force != "true" ]; then
+	return 0;
+    fi
+
+     msg "fsverity: enabling objects ..."
+     # Prepare rootfs for fs-verity
+     tune2fs -O verity /dev/disk/by-label/otaroot
+     # Enable all objects first (images are the validation)
+     find "${SYSROOT_DIR}/ostree/repo/objects" -exec fsverity enable '{}' \; 2>/dev/null
+     # Enable all images
+     for cfsfile_ in "${SYSROOT_DIR}/ostree/deploy"/*/deploy/*/"${COMPOSEFS_NAME}"; do
+	# If enabled already, skip
+	if fsverity measure "${cfsfile_}" > /dev/null 2>/dev/null; then
+		continue
+	else
+		msg "fsverity: enabling images..."
+		fsverity enable "${cfsfile_}" 2>/dev/null
+	fi
+     done
+}
+
 ostree_run() {
+
 	if [ -n "$ROOTFS_DIR" ]; then
-		info "Preparing OSTree root at '$ROOTFS_DIR'..."
+		msg "Preparing OSTree root at '$ROOTFS_DIR'..."
+
+		if [ -n "$bootparam_cfs_enabled" ]; then
+			msg "CFS set to $bootparam_cfs_enabled"
+
+			if  [ "$bootparam_cfs_enabled" != "false" ]; then
+				ln -sf "$ROOTFS_DIR" "$SYSROOT_DIR"
+				cat << EOF > /usr/lib/ostree/prepare-root.conf
+[composefs]
+enabled=${bootparam_cfs_enabled}
+EOF
+				if [ "$bootparam_cfs_enabled" == "signed" ]; then
+					t0="$(date '+%s')"
+					composefs_enable_fsverity_all
+					t1="$(date '+%s')"
+					msg "fsverity: $((t1 - t0)) seconds."
+				fi
+			fi
+		fi
+
+		# Prepare root
 		/usr/lib/ostree/ostree-prepare-root $ROOTFS_DIR
 	else
 		debug "No rootfs has been set"

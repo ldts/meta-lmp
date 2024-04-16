@@ -128,6 +128,9 @@ WKS_FILE_DEPENDS:append:generic-arm64 = " ${INITRD_IMAGE_LIVE}"
 IMAGE_BOOT_FILES:generic-arm64 = "${@bb.utils.contains('WKS_FILE', 'image-efi-installer-grub.wks.in', 'grub-efi-bootaa64.efi;EFI/BOOT/bootaa64.efi ${IMGDEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}.ota-ext4;rootfs.img', '', d)}"
 
 # Intel
+DISTRO_FEATURES:append:intel-corei7-64 = " cfs"
+CFS_SIGN_KEYDIR:intel-corei7-64="${TOPDIR}/conf/keys/cfs"
+CFS_SIGN_KEYNAME:intel-corei7-64="cfs-dev"
 MACHINE_FEATURES:append:intel-corei7-64 = " tpm2"
 UEFI_SIGN_ENABLE:intel-corei7-64 = "1"
 OSTREE_BOOTLOADER:intel-corei7-64 ?= "none"

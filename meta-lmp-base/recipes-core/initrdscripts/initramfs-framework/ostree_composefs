@@ -17,16 +17,9 @@ ostree_composefs_prepare() {
 
 	[ -n "$missing_configs" ] && fatal "FATAL: Make sure your kernel enabled$missing_configs !!!"
 
-	msg "Enforcing signed Composefs"
 	# Composefs uses SYSROOT_DIR
 	ln -sf "$ROOTFS_DIR" "$SYSROOT_DIR"
 
-	# Prepare the composefs configuration for OSTree. If fs-verity enablement fails
-	# it will be captured during prepare root (signature validation)
-	cat << EOF > /usr/lib/ostree/prepare-root.conf
-[composefs]
-enabled=signed
-EOF
 	force=""
 	# Check if all measurements are already available
 	for cfsfile_ in "${SYSROOT_DIR}/ostree/deploy"/*/deploy/*/"${COMPOSEFS_NAME}"; do

@@ -8,11 +8,16 @@ ostree_enabled() {
 
 ostree_run() {
 	if [ -n "$ROOTFS_DIR" ]; then
-		if [ -n "$bootparam_composefs" ]; then
-			[ ! -d /etc/ostree ] && msg "No initramfs composefs module found"
-			. /etc/ostree/composefs
-
-			ostree_composefs_prepare
+		# Check if composefs was configured
+		if [ -e /usr/lib/ostree/prepare-root.conf ]; then
+			composefs=$(sed -n '/\[composefs\]/{:a;n;/enabled/{s/.*=//p;q};ba}' /usr/lib/ostree/prepare-root.conf)
+			msg "CFS = $composefs "
+			if [ "$composefs" == "signed"]; then
+				# Check if the composefs module is present
+				[ ! -e /etc/ostree/composefs ] && fatal "No initramfs composefs module found"
+				. /etc/ostree/composefs
+				ostree_composefs_prepare
+			fi
 		fi
 
 		msg "Preparing OSTree root at '$ROOTFS_DIR'..."

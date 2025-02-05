@@ -1,0 +1,30 @@
+From d7484cbb498a7fc413d464ff768b8a7b25ac326a Mon Sep 17 00:00:00 2001
+From: Jorge Ramirez-Ortiz <jorge@foundries.io>
+Date: Wed, 5 Feb 2025 15:56:34 +0100
+Subject: [PATCH] composefs: block device on sysroot
+
+rootfs corresponds to the composefs overlay: use sysroot instead.
+
+Upstream-Status: Inappropriate [lmp specific]
+
+Signed-off-by: Jorge Ramirez-Ortiz <jorge@foundries.io>
+---
+ src/shared/blockdev-util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/shared/blockdev-util.c b/src/shared/blockdev-util.c
+index c27fe894cb..d900c7eb08 100644
+--- a/src/shared/blockdev-util.c
++++ b/src/shared/blockdev-util.c
+@@ -850,7 +850,7 @@ int blockdev_get_root(int level, dev_t *ret) {
+          * root block device node is symlinked in /run/systemd/volatile-root. Let's read that here. */
+         r = readlink_malloc("/run/systemd/volatile-root", &p);
+         if (r == -ENOENT) { /* volatile-root not found */
+-                r = get_block_device_harder("/", &devno);
++                r = get_block_device_harder("/sysroot", &devno);
+                 if (r == -EUCLEAN)
+                         return btrfs_log_dev_root(level, r, "root file system");
+                 if (r < 0)
+-- 
+2.34.1
+

@@ -14,3 +14,4 @@ SRC_URI:append = " \
 "
 
 PACKAGECONFIG:remove = "static"
+PACKAGECONFIG:append = " composefs ed25519-libsodium "

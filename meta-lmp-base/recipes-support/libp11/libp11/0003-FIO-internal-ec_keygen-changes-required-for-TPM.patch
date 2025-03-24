@@ -1,7 +1,7 @@
-From 561e3e456f7474937d78f4ba609da5b7bdfa1e32 Mon Sep 17 00:00:00 2001
+From 55ea4317abc8d37b76cffa65da3b2820818d6aab Mon Sep 17 00:00:00 2001
 From: Jorge Ramirez-Ortiz <jorge@foundries.io>
 Date: Sun, 16 Apr 2023 21:39:37 +0200
-Subject: [PATCH 3/4] [FIO internal] ec_keygen: changes required for TPM
+Subject: [PATCH 3/3] [FIO internal] ec_keygen: changes required for TPM
 
 These changes depend on EC support being merged
 [ie, https://github.com/OpenSC/libp11/pull/474]
@@ -16,10 +16,10 @@ Signed-off-by: Jorge Ramirez-Ortiz <jorge@foundries.io>
  1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/src/p11_key.c b/src/p11_key.c
-index c3b8c0b..5de6360 100644
+index ab2b1f1..d5b2d74 100644
 --- a/src/p11_key.c
 +++ b/src/p11_key.c
-@@ -354,11 +354,10 @@ int pkcs11_ec_keygen(PKCS11_SLOT_private *slot, const char *curve,
+@@ -361,11 +361,10 @@ int pkcs11_ec_keygen(PKCS11_SLOT_private *slot, const char *curve,
  	if (label)
  		pkcs11_addattr_s(&pubtmpl, CKA_LABEL, label);
  	pkcs11_addattr_bool(&pubtmpl, CKA_TOKEN, TRUE);
@@ -33,7 +33,7 @@ index c3b8c0b..5de6360 100644
  	pkcs11_addattr(&pubtmpl, CKA_ECDSA_PARAMS, ecdsa_params, ecdsa_params_len);
  
  	/* privkey attributes */
-@@ -366,12 +365,10 @@ int pkcs11_ec_keygen(PKCS11_SLOT_private *slot, const char *curve,
+@@ -373,12 +372,10 @@ int pkcs11_ec_keygen(PKCS11_SLOT_private *slot, const char *curve,
  	if (label)
  		pkcs11_addattr_s(&privtmpl, CKA_LABEL, label);
  	pkcs11_addattr_bool(&privtmpl, CKA_TOKEN, TRUE);
